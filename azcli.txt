@@ -1,0 +1,54 @@
+on local laptop
+1. hyper-v is enabled
+2 install docker-desktop
+3 install Visual studio 2019
+
+
+on Azure
+
+create a vm d4s_v3 vm with  windows server 2019 with containers
+install Hyper-v feature
+install docker desktop
+install visual studio 2019
+
+
+
+
+az login
+az account set -s f00dc
+az group create -l "west europe" -n mclass
+az acr create -n mclassimagerepo -l "west europe"  -g mclass --sku standard --admin-enabled --verbose
+az acr credential show -n mclassimagerepo -g mclass
+docker login mclassimagerepo.azurecr.io -u mclassimagerepo -p kbzbNdJi+sUWdhNS0zxlbMGpFjPUcnHY
+docker tag webapplication4:latest mclassimagerepo.azurecr.io/webapplication4:v1
+docker push  mclassimagerepo.azurecr.io/webapplication4:v1
+
+az extension add --name aks-preview
+az extension update --name aks-preview
+az feature register --name WindowsPreview --namespace Microsoft.ContainerService
+az provider register --namespace Microsoft.ContainerService
+
+az ad sp create-for-rbac --skip-assignment --verbose
+
+az aks create -g mclass -n mclasskube -l "west europe"  --client-secret "f10914e4-b8f4-4c49-8a7e-72899a085046"  --enable-addons monitoring --generate-ssh-keys --kubernetes-version 1.14.7 --load-balancer-sku standard --network-plugin azure --node-count 2 --nodepool-name linuxpool --service-principal c932eeae-2929-4e4f-a08e-8bda1cb78182 --verbose
+
+az acr show -n mclassimagerepo -g mclass
+
+az role assignment create --role acrpull --scope "/subscriptions/f0bb4697-5b29-46cc-8fc9-a4e5ac7800dc/resourceGroups/mclass/providers/Microsoft.ContainerRegistry/registries/mclassimagerepo" --assignee c932eeae-2929-4e4f-a08e-8bda1cb78182
+
+az aks install-cli
+az aks  get-credentials -g mclass -n mclasskube
+
+<<Open a new command prompt>>
+
+kubectl get nodes
+
+
+
+
+
+
+
+
+
+
