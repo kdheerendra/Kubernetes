@@ -1,0 +1,30 @@
+apiVersion: apps/betav1
+kind: Deployment
+metadata:
+  name: myds
+  labels:
+    app: dsdemo
+spec:
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailble: 1  
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mypod
+  template:
+    metadata:
+      name: mypods1
+      labels:
+        apps: mypod
+    spec:
+      containers:
+        - name: container1
+          image: ngiix:1.10.5
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 80
+
