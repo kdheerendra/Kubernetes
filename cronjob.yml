@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mycronjob
+  labels:
+    app: cronjobdemo
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    metadata:
+      name: mycronjob
+      labels:
+        app: cronjobdemo
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            beta.kubernetes.io/os: linux
+          containers:
+            - name: container1
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo Hello from Kubernetes;
+          restartPolicy: OnFailure 
