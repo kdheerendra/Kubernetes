@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+  labels:
+    app: datajob
+spec:
+  template:
+    metadata:
+      name: podjobs
+      labels:
+        app: podjobs
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: container1
+          image: nginx:1.15.5
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+
+
+
