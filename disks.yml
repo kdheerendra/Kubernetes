@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volumedemo
+  labels:
+    app: volumes
+spec:
+  containers:
+    - name: container1
+      image: nginx:1.15.5
+      volumeMounts:
+        - name: mydisk
+          mountPath: /ritesh
+          readOnly: false
+    - name: container2
+      image: busybox
+      volumeMounts:
+        - name: mydisk
+          mountPath: /modi
+          readOnly: false
+      args:
+       - /bin/sh
+       - -c
+       - "while true; do date; echo Hello from Kubernetes; done"
+  volumes:
+    - name: mydisk
+      azureDisk:
+        kind: Managed
+        diskName: mclassaksdisk
+        diskURI: /subscriptions/f0bb4697-5b29-46cc-8fc9-a4e5ac7800dc/resourceGroups/MC_mclass_mclasskube_westeurope/providers/Microsoft.Compute/disks/mclassaksdisk 
