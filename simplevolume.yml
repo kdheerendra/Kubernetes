@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volumedemo
+  labels:
+    app: volumes
+spec:
+  containers:
+    - name: container1
+      image: nginx:1.15.5
+      ports:
+        - name: http
+          protocol: TCP
+          containerPort: 80
+      volumeMounts:
+        - name: myvol
+          mountPath: /ritesh
+          readOnly: false
+  volumes:
+    - name: myvol
+      emptyDir: {} 
