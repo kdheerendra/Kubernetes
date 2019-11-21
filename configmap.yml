@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simpleconfig
+  labels:
+    app: volumes
+spec:
+  containers:
+    - name: container2
+      image: busybox
+      env:
+        - name: myev1
+          valueFrom:
+            configMapKeyRef: 
+              name: mycm
+              key: location
+      args:
+       - /bin/sh
+       - -c
+       - "while true; do date; echo Hello from $(myev1); done"
+
